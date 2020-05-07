@@ -53,7 +53,6 @@ public class EnterData extends AppCompatActivity  implements View.OnClickListene
         btnsave.setOnClickListener(EnterData.this);
 
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -75,7 +74,7 @@ public class EnterData extends AppCompatActivity  implements View.OnClickListene
                     reeciveImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     byte[] image = stream.toByteArray();
                     // Create the ParseFile
-                    ParseFile file = new ParseFile( "akash.png", image);
+                    ParseFile file = new ParseFile( edtName.getText().toString()+".png", image);
                     // Upload the image into Parse Cloud
                     file.saveInBackground();
                     // Create a New Class called "ImageUpload" in Parse
@@ -95,6 +94,7 @@ public class EnterData extends AppCompatActivity  implements View.OnClickListene
                             if (e == null) {
                                 FancyToast.makeText(EnterData.this, "IMAGE IS UPLOAD ", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                 process.dismiss();
+                                FancyToast.makeText(EnterData.this,""+Integer.parseInt(edtAmount.getText().toString())*Integer.parseInt(edtPercentage.getText().toString())
                             }
                         }
                     });

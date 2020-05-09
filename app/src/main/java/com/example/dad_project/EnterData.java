@@ -17,9 +17,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -33,14 +36,17 @@ import java.lang.annotation.Retention;
 
 public class EnterData extends AppCompatActivity  implements View.OnClickListener {
 
-    private EditText edtName, edtPhoneNumber, edtAmount, edtPercentage, edtAddress;
-    Button btnsave;
+    protected EditText edtName, edtPhoneNumber, edtAmount, edtPercentage, edtAddress;
+    Button btnsave,btnList;
     ImageView profile;
+    TextView  Interest;
     Bitmap reeciveImageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_enter_data);
         edtName = findViewById(R.id.name);
         edtAmount = findViewById(R.id.Amount);
@@ -48,9 +54,12 @@ public class EnterData extends AppCompatActivity  implements View.OnClickListene
         edtPhoneNumber = findViewById(R.id.PhoneNumber);
         edtPercentage = findViewById(R.id.percentage);
         btnsave = findViewById(R.id.Save);
+        Interest = findViewById(R.id.inter);
+        btnList=findViewById(R.id.checklist);
         profile = findViewById(R.id.imageView);
         profile.setOnClickListener(EnterData.this);
         btnsave.setOnClickListener(EnterData.this);
+        btnList.setOnClickListener(EnterData.this);
 
     }
     @Override
@@ -77,14 +86,16 @@ public class EnterData extends AppCompatActivity  implements View.OnClickListene
                     ParseFile file = new ParseFile( edtName.getText().toString()+".png", image);
                     // Upload the image into Parse Cloud
                     file.saveInBackground();
+
                     // Create a New Class called "ImageUpload" in Parse
                     ParseObject imgupload = new ParseObject("UserData");
                     imgupload.put("Image", file);
                     imgupload.put("Username", edtName.getText().toString());
                     imgupload.put("Address", edtAddress.getText().toString());
-                    imgupload.put("PhoneNumber", Integer.parseInt(edtPhoneNumber.getText().toString()));
-                    imgupload.put("Amount", Integer.parseInt(edtAmount.getText().toString()));
+                    imgupload.put("PhoneNumber", Double.parseDouble(edtPhoneNumber.getText().toString()));
+                    imgupload.put("Amount", Double.parseDouble(edtAmount.getText().toString()));
                     imgupload.put("Percentage", Integer.parseInt(edtPercentage.getText().toString()));
+                    //imgupload.put("Interest", Integer.parseInt(Interest.getText().toString()));
                     final ProgressDialog process = new ProgressDialog(EnterData.this);
                     process.setMessage("Please wait");
                     process.show();
@@ -92,19 +103,37 @@ public class EnterData extends AppCompatActivity  implements View.OnClickListene
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                FancyToast.makeText(EnterData.this, "IMAGE IS UPLOAD ", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
+                                FancyToast.makeText(EnterData.this, "Data is Upload ", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                 process.dismiss();
-                                FancyToast.makeText(EnterData.this,""+Integer.parseInt(edtAmount.getText().toString())*Integer.parseInt(edtPercentage.getText().toString())
+
+
+                                reset();
                             }
                         }
                     });
-
+                                 last();
                 }else {
                 FancyToast.makeText(EnterData.this, "you Must Select an Image", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
             }
+
+                break;
+            case R.id.checklist:
+                    startActivity(new Intent(EnterData.this,People_List.class));
+
+
+                    break;
         }
 
     }
+
+    private void reset() {
+        edtName.setText("");
+        edtPhoneNumber.setText("");
+        edtAddress.setText("");
+        edtAmount.setText("");
+        edtPercentage.setText("");
+    }
+
     private void getChosenImage() {
         Intent intent=new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -139,5 +168,12 @@ public class EnterData extends AppCompatActivity  implements View.OnClickListene
             }
         }
 
+
     }
+public void last(){
+    int p =Integer.parseInt(edtPercentage.getText().toString());
+    double A=Double.parseDouble(edtAmount.getText().toString());
+    double interest=A*p/100;
+    FancyToast.makeText(EnterData.this, interest+"interest", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+}
 }

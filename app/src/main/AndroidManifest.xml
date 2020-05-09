@@ -14,12 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EnterData"></activity>
+        <activity android:name=".UserPost"></activity>
+        <activity android:name=".People_List"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".EnterData"  android:theme="@style/AppTheme"/>
         <activity android:name=".Login" />
-        <activity
-            android:name=".ui.login.Login"
-            android:label="@string/title_activity_login" />
         <activity android:name=".MainActivity">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

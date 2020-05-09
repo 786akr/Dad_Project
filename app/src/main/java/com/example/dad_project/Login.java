@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +24,8 @@ public class Login extends AppCompatActivity  implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         btnLogin = findViewById(R.id.btn_Signup);
         edtEmail = findViewById(R.id.input_email);
@@ -34,27 +38,31 @@ public class Login extends AppCompatActivity  implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        ParseUser.logInInBackground(edtEmail.getText().toString(),edtPassword.getText().toString(),(new LogInCallback() {
+        ParseUser.logInInBackground(edtEmail.getText().toString(), edtPassword.getText().toString(), (new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if(e==null&&user!=null){
-                    FancyToast.makeText(Login.this,"Logged in",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
-                        trasnist();
+                if (e == null && user != null) {
+                    FancyToast.makeText(Login.this, "Logged in", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                    trasnist();
 
-                }else{
-                    FancyToast.makeText(Login.this,"Error"
-                            ,FancyToast.LENGTH_LONG,FancyToast.ERROR,
+
+                } else {
+                    FancyToast.makeText(Login.this, "Error"
+                            , FancyToast.LENGTH_LONG, FancyToast.ERROR,
                             true).show();
 
                 }
             }
         }));
 
+
+    }
+    private void trasnist()
+    {
+        startActivity(new Intent(Login.this,EnterData.class));
+             finish();
     }
 
-    private void trasnist() {
-        startActivity(new Intent(Login.this,EnterData.class));
-    }
 
 }
 
